@@ -184,8 +184,12 @@ export default function Home() {
     setChallengeIndex((previous) => (previous + 1) % challengeBank.length);
   };
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const startAdventure = () => {
-    document.getElementById("gameplay")?.scrollIntoView({ behavior: "smooth" });
+    scrollToSection("gameplay");
   };
 
   return (
@@ -208,7 +212,11 @@ export default function Home() {
           <a href="#academy" className="hover:text-cyan-300">Academy</a>
         </nav>
 
-        <button className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20">
+        <button
+          type="button"
+          onClick={() => scrollToSection("gameplay")}
+          className="rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-500/20"
+        >
           Play Now
         </button>
       </header>
@@ -239,7 +247,11 @@ export default function Home() {
               >
                 Start Your Adventure
               </button>
-              <button className="rounded-full border border-slate-600 bg-slate-900/60 px-6 py-3 text-base font-semibold text-slate-100 transition hover:border-cyan-400/60 hover:text-cyan-200">
+              <button
+                type="button"
+                onClick={() => scrollToSection("worlds")}
+                className="rounded-full border border-slate-600 bg-slate-900/60 px-6 py-3 text-base font-semibold text-slate-100 transition hover:border-cyan-400/60 hover:text-cyan-200"
+              >
                 Explore Worlds
               </button>
             </div>
@@ -314,7 +326,11 @@ export default function Home() {
             <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">Game worlds</p>
             <h2 className="mt-2 text-3xl font-black text-white">Choose your next quest</h2>
           </div>
-          <button className="hidden rounded-full border border-slate-700 bg-slate-900/50 px-4 py-2 text-sm text-slate-200 md:inline-flex">
+          <button
+            type="button"
+            onClick={() => scrollToSection("gameplay")}
+            className="hidden rounded-full border border-slate-700 bg-slate-900/50 px-4 py-2 text-sm text-slate-200 md:inline-flex"
+          >
             Unlock all worlds
           </button>
         </div>
@@ -332,7 +348,11 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-white">{world.name}</h3>
               <p className="mt-2 min-h-[54px] text-sm leading-6 text-slate-300">{world.description}</p>
-              <button className="mt-4 inline-flex rounded-full bg-slate-800 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:bg-slate-700">
+              <button
+                type="button"
+                onClick={startAdventure}
+                className="mt-4 inline-flex rounded-full bg-slate-800 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:bg-slate-700"
+              >
                 Enter world
               </button>
             </article>
@@ -387,7 +407,11 @@ export default function Home() {
           <div className="rounded-[30px] border border-slate-700 bg-slate-900/70 p-5">
             <div className="mb-5 flex items-center justify-between">
               <h3 className="text-2xl font-black">Subject mastery</h3>
-              <button className="rounded-full bg-cyan-500/10 px-3 py-1.5 text-sm font-semibold text-cyan-200">
+              <button
+                type="button"
+                onClick={startAdventure}
+                className="rounded-full bg-cyan-500/10 px-3 py-1.5 text-sm font-semibold text-cyan-200"
+              >
                 Continue playing
               </button>
             </div>
@@ -580,7 +604,11 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-black text-white">{lesson.title}</h3>
               <p className="mt-3 text-sm leading-6 text-slate-300">{lesson.body}</p>
-              <button className="mt-5 rounded-full border border-slate-600 bg-slate-950/60 px-4 py-2 text-sm font-semibold text-slate-100 hover:border-cyan-400/50">
+              <button
+                type="button"
+                onClick={startAdventure}
+                className="mt-5 rounded-full border border-slate-600 bg-slate-950/60 px-4 py-2 text-sm font-semibold text-slate-100 hover:border-cyan-400/50"
+              >
                 Start lesson
               </button>
             </article>
