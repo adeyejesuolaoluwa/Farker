@@ -41,6 +41,33 @@ const dailyMissions = [
   "Solve 1 AI challenge",
 ];
 
+function BrandMark() {
+  return (
+    <svg viewBox="0 0 120 120" className="h-12 w-12" aria-label="Goalk logo" role="img">
+      <defs>
+        <linearGradient id="goalk-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+          <stop offset="0%" stopColor="#7dd3fc" />
+          <stop offset="50%" stopColor="#60a5fa" />
+          <stop offset="100%" stopColor="#8b5cf6" />
+        </linearGradient>
+      </defs>
+      <circle cx="60" cy="60" r="52" fill="url(#goalk-gradient)" opacity="0.96" />
+      <circle cx="60" cy="60" r="40" fill="#0c1830" opacity="0.85" />
+      <circle cx="60" cy="60" r="22" fill="none" stroke="#facc15" strokeWidth="6" strokeDasharray="2 10" />
+      <circle cx="60" cy="60" r="8" fill="#f8fafc" />
+      <path
+        d="M41 68c3-12 14-21 28-21 14 0 24 8 28 21-7 6-13 9-20 9-10 0-17-6-20-9-3 4-7 6-16 6Z"
+        fill="#f8fafc"
+        opacity="0.96"
+      />
+      <path d="M50 48c0-8 5-14 10-14 6 0 11 7 11 15" fill="none" stroke="#f8fafc" strokeWidth="5" strokeLinecap="round" />
+      <path d="M46 75c5 3 13 5 17 5 4 0 11-2 16-5" fill="none" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="75" cy="40" r="4" fill="#facc15" />
+      <circle cx="48" cy="42" r="4" fill="#7dd3fc" />
+    </svg>
+  );
+}
+
 const achievements = [
   { title: "Pattern Scout", unlocked: true },
   { title: "Math Explorer", unlocked: true },
@@ -165,12 +192,12 @@ export default function Home() {
     <main className="min-h-screen bg-[#071224] text-white">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-600 shadow-lg shadow-cyan-500/30">
-            <span className="text-xl font-black">G</span>
+          <div className="rounded-[20px] border border-cyan-300/40 bg-slate-950/60 p-1.5 shadow-[0_0_30px_rgba(56,189,248,0.35)]">
+            <BrandMark />
           </div>
           <div>
-            <p className="text-xl font-black tracking-tight">Goalk</p>
-            <p className="text-xs text-slate-300">Level up your thinking</p>
+            <p className="text-xl font-black tracking-tight text-white">Goalk</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-300">Level up your thinking</p>
           </div>
         </div>
 
@@ -187,16 +214,17 @@ export default function Home() {
       </header>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.28),transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.22),transparent_26%),radial-gradient(circle_at_right,_rgba(168,85,247,0.18),transparent_32%),linear-gradient(135deg,#071224_0%,#0d1d36_35%,#10162c_100%)]" />
+        <div className="absolute left-1/2 top-10 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
         <div className="relative mx-auto grid max-w-7xl gap-16 px-6 pb-16 pt-10 lg:grid-cols-[1.2fr_0.8fr] lg:px-10 lg:pt-16">
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-yellow-300/40 bg-yellow-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-200">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-yellow-300/50 bg-yellow-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-100">
               <span className="h-2 w-2 rounded-full bg-yellow-300" />
               Smart learning adventure
             </div>
 
             <h1 className="max-w-xl text-5xl font-black leading-[1.02] tracking-tight text-white md:text-6xl">
-              Train Your Brain. <span className="text-cyan-300">Level Up</span> Your Future.
+              Train Your Brain. <span className="bg-gradient-to-r from-cyan-300 via-blue-300 to-violet-300 bg-clip-text text-transparent">Level Up</span> Your Future.
             </h1>
 
             <p className="mt-6 max-w-lg text-lg leading-8 text-slate-300">

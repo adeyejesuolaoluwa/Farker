@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050d1a;
-  --foreground: #f8fbff;
+  --background: #07111f;
+  --foreground: #eef7ff;
+  --panel: #0e1c2f;
+  --panel-soft: #122640;
+  --line: rgba(148, 163, 184, 0.18);
+  --cyan: #67e8f9;
+  --blue: #60a5fa;
+  --violet: #a78bfa;
+  --yellow: #facc15;
 }
 
 @theme inline {
@@ -19,8 +26,8 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top, rgba(34, 211, 238, 0.17), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.18), transparent 28%),
+    radial-gradient(circle at top, rgba(103, 232, 249, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(167, 139, 250, 0.14), transparent 26%),
     var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
@@ -35,11 +42,15 @@ button {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(103, 232, 249, 0.35);
   color: white;
 }
 
 .glass-card {
-  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.52);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(12px);
+}
+
+.rounded-\[28px\] {
+  border-color: var(--line);
 }
