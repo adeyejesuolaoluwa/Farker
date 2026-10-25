@@ -86,7 +86,8 @@ const mastery = [
 const challengeBank = [
   {
     title: "The Missing Number",
-    difficulty: "Warm-up",
+    difficulty: "Level 1 · Warm-up",
+    prompt: "What number comes next?",
     sequence: [3, 6, 12, 24, "?"],
     options: ["30", "36", "48", "42"],
     correctIndex: 2,
@@ -95,13 +96,48 @@ const challengeBank = [
     hint: "Look for a repeated pattern: what happens between each number?",
   },
   {
-    title: "Shape Sequence",
-    difficulty: "Logic Boost",
-    sequence: ["△", "△△", "△△△", "?"],
-    options: ["△△△△", "△△", "△△△△△", "△"],
-    correctIndex: 0,
-    explanation: "The triangle count increases by one each step, so the next pattern is four triangles.",
-    hint: "Count how many shapes are added each time.",
+    title: "Growing Gaps",
+    difficulty: "Level 2 · Thinker",
+    prompt: "What number comes next?",
+    sequence: [2, 5, 10, 17, 26, "?"],
+    options: ["35", "37", "36", "39"],
+    correctIndex: 1,
+    explanation:
+      "The gaps are 3, 5, 7, and 9: consecutive odd numbers. The next gap is 11, so 26 + 11 = 37.",
+    hint: "Compare the gaps between neighboring numbers. Do the gaps follow a pattern?",
+  },
+  {
+    title: "Double the Difference",
+    difficulty: "Level 3 · Challenger",
+    prompt: "What number comes next?",
+    sequence: [4, 7, 13, 25, 49, "?"],
+    options: ["95", "96", "97", "99"],
+    correctIndex: 2,
+    explanation:
+      "Each step doubles the previous number and subtracts 1: 4 × 2 − 1 = 7, 7 × 2 − 1 = 13, and so on. Therefore 49 × 2 − 1 = 97.",
+    hint: "Try doubling each number, then compare that result with the next term.",
+  },
+  {
+    title: "Fibonacci Trail",
+    difficulty: "Level 4 · Brain Bender",
+    prompt: "What number comes next?",
+    sequence: [2, 3, 5, 8, 13, "?"],
+    options: ["18", "20", "21", "24"],
+    correctIndex: 2,
+    explanation:
+      "Each number is the sum of the two before it: 2 + 3 = 5, 3 + 5 = 8, 5 + 8 = 13. So the next number is 8 + 13 = 21.",
+    hint: "Check whether each term can be made by combining the two terms before it.",
+  },
+  {
+    title: "Factorial Climb",
+    difficulty: "Level 5 · Master",
+    prompt: "What number comes next?",
+    sequence: [1, 2, 6, 24, 120, "?"],
+    options: ["480", "600", "720", "840"],
+    correctIndex: 2,
+    explanation:
+      "The multipliers increase by one: ×2, ×3, ×4, ×5. The next step is ×6, so 120 × 6 = 720.",
+    hint: "Look at the multiplier from one term to the next. It changes each time.",
   },
 ];
 
@@ -144,6 +180,8 @@ export default function Home() {
   const [showHint, setShowHint] = useState(false);
   const [challengeIndex, setChallengeIndex] = useState(0);
   const [result, setResult] = useState<"correct" | "incorrect" | null>(null);
+  const [attempts, setAttempts] = useState(0);
+  const [seriesComplete, setSeriesComplete] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -154,34 +192,47 @@ export default function Home() {
   const currentChallenge = challengeBank[challengeIndex];
 
   const handleSubmit = () => {
-    if (selectedOption === null) return;
+    if (selectedOption === null || isSubmitted) return;
 
     const correct = selectedOption === currentChallenge.correctIndex;
-    setIsSubmitted(true);
     setResult(correct ? "correct" : "incorrect");
 
     if (correct) {
+      setIsSubmitted(true);
       setPlayer((previous) => ({
         ...previous,
-        xp: previous.xp + 120,
-        coins: previous.coins + 35,
+        xp: previous.xp + 120 + challengeIndex * 30,
+        coins: previous.coins + 35 + challengeIndex * 5,
         streak: previous.streak + 1,
         world: "Logic Lab",
       }));
     } else {
-      setPlayer((previous) => ({
-        ...previous,
-        streak: Math.max(0, previous.streak - 1),
-      }));
+      setAttempts((previous) => previous + 1);
+      setShowHint(true);
     }
   };
 
   const handleNextChallenge = () => {
+    if (seriesComplete) {
+      setChallengeIndex(0);
+      setSeriesComplete(false);
+    } else if (challengeIndex === challengeBank.length - 1) {
+      setSeriesComplete(true);
+      setSelectedOption(null);
+      setIsSubmitted(false);
+      setShowHint(false);
+      setResult(null);
+      setAttempts(0);
+      return;
+    } else {
+      setChallengeIndex((previous) => previous + 1);
+    }
+
     setSelectedOption(null);
     setIsSubmitted(false);
     setShowHint(false);
     setResult(null);
-    setChallengeIndex((previous) => (previous + 1) % challengeBank.length);
+    setAttempts(0);
   };
 
   const scrollToSection = (id: string) => {
@@ -457,16 +508,43 @@ export default function Home() {
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Challenge screen</p>
-              <h2 className="mt-2 text-3xl font-black text-white">{currentChallenge.title}</h2>
+              <h2 className="mt-2 text-3xl font-black text-white">
+                {seriesComplete ? "Logic Lab complete!" : currentChallenge.title}
+              </h2>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-3 py-2 text-sm font-semibold text-violet-100">
-              {currentChallenge.difficulty}
+              {seriesComplete ? "All 5 levels mastered" : currentChallenge.difficulty}
             </div>
           </div>
 
+          {seriesComplete ? (
+            <div className="rounded-[28px] border border-emerald-400/40 bg-emerald-500/10 p-8 text-center">
+              <p className="text-2xl font-black text-emerald-100">Every puzzle solved. Brilliant work!</p>
+              <p className="mx-auto mt-3 max-w-xl text-slate-200">
+                You worked through five challenges that grew more complex at each level. Ready to sharpen your skills again?
+              </p>
+              <button
+                type="button"
+                onClick={handleNextChallenge}
+                className="mt-6 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-6 py-3 font-bold text-slate-950"
+              >
+                Play again from Level 1
+              </button>
+            </div>
+          ) : (
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="rounded-[28px] border border-slate-700 bg-slate-950/50 p-5">
               <p className="mb-4 text-sm uppercase tracking-[0.2em] text-slate-300">Sequence</p>
+              <div className="mb-4 flex items-center justify-between text-xs text-slate-400">
+                <span>Challenge {challengeIndex + 1} of {challengeBank.length}</span>
+                <span>Correct answers earn {120 + challengeIndex * 30} XP</span>
+              </div>
+              <div className="mb-5 h-2 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-400 transition-all"
+                  style={{ width: `${((challengeIndex + 1) / challengeBank.length) * 100}%` }}
+                />
+              </div>
               <div className="flex flex-wrap items-center gap-3 text-3xl font-black text-white md:text-4xl">
                 {currentChallenge.sequence.map((item, index) => (
                   <span key={`${item}-${index}`} className="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3">
@@ -476,7 +554,7 @@ export default function Home() {
               </div>
 
               <p className="mt-6 text-lg text-slate-200">
-                What number comes next?
+                {currentChallenge.prompt}
               </p>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -508,12 +586,14 @@ export default function Home() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
+                  type="button"
                   onClick={() => setShowHint(true)}
                   className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-200 hover:border-cyan-400/50 hover:text-cyan-200"
                 >
                   Need a hint?
                 </button>
                 <button
+                  type="button"
                   onClick={handleSubmit}
                   disabled={selectedOption === null || isSubmitted}
                   className="rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-5 py-2 text-sm font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
@@ -534,13 +614,17 @@ export default function Home() {
 
               {result === "correct" ? (
                 <div className="mt-4 rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-4 text-emerald-100">
-                  <p className="text-lg font-black">Correct! +120 XP</p>
+                  <p className="text-lg font-black">Correct! +{120 + challengeIndex * 30} XP</p>
                   <p className="mt-2 text-sm leading-6 text-emerald-50">{currentChallenge.explanation}</p>
                 </div>
               ) : result === "incorrect" ? (
                 <div className="mt-4 rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-rose-100">
-                  <p className="text-lg font-black">Not quite — try the pattern again.</p>
-                  <p className="mt-2 text-sm leading-6 text-rose-50">{currentChallenge.explanation}</p>
+                  <p className="text-lg font-black">Not quite — have another try.</p>
+                  <p className="mt-2 text-sm leading-6 text-rose-50">
+                    {attempts > 1
+                      ? currentChallenge.explanation
+                      : "Look for a rule that stays consistent from one term to the next. Your progress is safe."}
+                  </p>
                 </div>
               ) : (
                 <div className="mt-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 text-slate-200">
@@ -558,20 +642,22 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-900/60 px-3 py-3 text-sm text-slate-200">
                   <span>Unlock next world</span>
-                  <span className="font-semibold text-yellow-300">+15 XP</span>
+                  <span className="font-semibold text-yellow-300">Next level</span>
                 </div>
               </div>
 
               {isSubmitted && (
                 <button
+                  type="button"
                   onClick={handleNextChallenge}
                   className="mt-6 w-full rounded-full bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 px-5 py-3 text-base font-black text-slate-900"
                 >
-                  Next challenge
+                  {challengeIndex === challengeBank.length - 1 ? "Finish challenge set" : "Next harder challenge"}
                 </button>
               )}
             </div>
           </div>
+          )}
         </div>
       </section>
 
